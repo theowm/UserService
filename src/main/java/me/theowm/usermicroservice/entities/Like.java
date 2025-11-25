@@ -16,18 +16,16 @@ public class Like {
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID uuid;
 
-    //@Column(nullable=false)
-    //private String userUuid;
-
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(referencedColumnName = "uuid")
     private User user;
 
-    //@Column(nullable=false)
-    //private String mediaUuid;
-
     @Column(nullable = false)
     private UUID mediaUuid;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MediaType mediaType;
 
     public UUID getUuid() {
         return uuid;
@@ -45,20 +43,20 @@ public class Like {
         this.user = user;
     }
 
-    /*public String getMediaUuid() {
-        return mediaUuid;
-    }
-
-    public void setMediaUuid(String mediaUuid) {
-        this.mediaUuid = mediaUuid;
-    } */
-
     public UUID getMediaUuid() {
         return mediaUuid;
     }
 
     public void setMediaUuid(UUID mediaUuid) {
         this.mediaUuid = mediaUuid;
+    }
+
+    public MediaType getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(MediaType mediaType) {
+        this.mediaType = mediaType;
     }
 
     public Like() {

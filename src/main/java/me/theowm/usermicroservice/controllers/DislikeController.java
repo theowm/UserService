@@ -1,20 +1,18 @@
 package me.theowm.usermicroservice.controllers;
 
-import me.theowm.usermicroservice.DTOs.UserDislikesResponseDTO;
 import me.theowm.usermicroservice.entities.Dislike;
-import me.theowm.usermicroservice.entities.Like;
 import me.theowm.usermicroservice.services.DislikeService;
-import me.theowm.usermicroservice.services.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/dislikes")
+@RequestMapping("/user/dislikes")
 public class DislikeController {
 
     private final DislikeService dislikeService;
@@ -46,8 +44,14 @@ public class DislikeController {
     }
 
     @GetMapping("/userdislikes/{userId}")
-    public ResponseEntity<UserDislikesResponseDTO> getDislikesForUser(@PathVariable UUID userId) {
+    public ResponseEntity<List<UUID>> getDislikesForUser(@PathVariable UUID userId) {
         return ResponseEntity.ok(dislikeService.getDislikesForUser(userId));
+    }
+
+    @GetMapping("/userdislikes/map/{userId}")
+    public ResponseEntity<Map<String, List<UUID>>> getUserDislikesMap(@PathVariable UUID userId) {
+        Map<String, List<UUID>> userLikes = dislikeService.getUserDislikes(userId);
+        return ResponseEntity.ok(userLikes);
     }
 
 }

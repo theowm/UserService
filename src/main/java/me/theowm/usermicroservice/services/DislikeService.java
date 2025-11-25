@@ -1,16 +1,14 @@
 package me.theowm.usermicroservice.services;
 
-import me.theowm.usermicroservice.DTOs.UserDislikesResponseDTO;
-import me.theowm.usermicroservice.DTOs.UserLikesResponseDTO;
 import me.theowm.usermicroservice.entities.Dislike;
 import me.theowm.usermicroservice.entities.Like;
-import me.theowm.usermicroservice.entities.User;
+import me.theowm.usermicroservice.entities.MediaType;
 import me.theowm.usermicroservice.repositories.DislikeRepository;
-import me.theowm.usermicroservice.repositories.LikeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -44,13 +42,23 @@ public class DislikeService implements DislikeServiceInterface {
         dislikeRepository.deleteById(id);
     }
 
-    public UserDislikesResponseDTO getDislikesForUser(UUID userId) {
-        List<Dislike> dislikes = dislikeRepository.findByUserUuid(userId);
-
-        List<UUID> mediaIds = dislikes.stream()
+    @Override
+    public List<UUID> getDislikesForUser(UUID userId) {
+        return dislikeRepository.findByUserUuid(userId)
+                .stream()
                 .map(Dislike::getMediaUuid)
                 .toList();
-
-        return new UserDislikesResponseDTO(userId, mediaIds);
     }
+
+    @Override
+    public Map<String, List<UUID>> getUserDislikes(UUID userId) {
+        List<Dislike> dislikes = dislikeRepository.findByUserUuid(userId);
+
+        return Map.of(
+                "music", dislikes.stream().filter(l -> l.getMediaType() == MediaType.MUSIC).map(Dislike::getMediaUuid).toList(),
+                "video", dislikes.stream().filter(l -> l.getMediaType() == MediaType.VIDEO).map(Dislike::getMediaUuid).toList(),
+                "podcast", dislikes.stream().filter(l -> l.getMediaType() == MediaType.PODCAST).map(Dislike::getMediaUuid).toList()
+        );
+    }
+
 }

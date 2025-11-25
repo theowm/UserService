@@ -15,18 +15,17 @@ public class Dislike {
     @Column(columnDefinition = "char(36)")
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID uuid;
-    //@Column(nullable=false)
-    //private String userUuid;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(referencedColumnName = "uuid")
     private User user;
 
-    //@Column(nullable=false)
-    //private String mediaUuid;
-
     @Column(nullable = false)
     private UUID mediaUuid;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MediaType mediaType;
 
     public UUID getUuid() {
         return uuid;
@@ -44,15 +43,13 @@ public class Dislike {
         this.user = user;
     }
 
-    /*public String getMediaUuid() {
-        return mediaUuid;
+    public MediaType getMediaType() {
+        return mediaType;
     }
 
-    public void setMediaUuid(String mediaUuid) {
-        this.mediaUuid = mediaUuid;
-    } */
-
-    //
+    public void setMediaType(MediaType mediaType) {
+        this.mediaType = mediaType;
+    }
 
     public UUID getMediaUuid() {
         return mediaUuid;

@@ -1,12 +1,13 @@
 package me.theowm.usermicroservice.services;
 
-import me.theowm.usermicroservice.DTOs.UserLikesResponseDTO;
 import me.theowm.usermicroservice.entities.Like;
+import me.theowm.usermicroservice.entities.MediaType;
 import me.theowm.usermicroservice.repositories.LikeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -40,13 +41,22 @@ public class LikeService implements LikeServiceInterface {
         likeRepository.deleteById(id);
     }
 
-    public UserLikesResponseDTO getLikesForUser(UUID userId) {
-        List<Like> likes = likeRepository.findByUserUuid(userId);
-
-        List<UUID> mediaIds = likes.stream()
+    @Override
+    public List<UUID> getLikesForUser(UUID userId) {
+        return likeRepository.findByUserUuid(userId)
+                .stream()
                 .map(Like::getMediaUuid)
                 .toList();
+    }
 
-        return new UserLikesResponseDTO(userId, mediaIds);
+    @Override
+    public Map<String, List<UUID>> getUserLikes(UUID userId) {
+        List<Like> likes = likeRepository.findByUserUuid(userId);
+
+        return Map.of(
+                "music", likes.stream().filter(l -> l.getMediaType() == MediaType.MUSIC).map(Like::getMediaUuid).toList(),
+                "video", likes.stream().filter(l -> l.getMediaType() == MediaType.VIDEO).map(Like::getMediaUuid).toList(),
+                "podcast", likes.stream().filter(l -> l.getMediaType() == MediaType.PODCAST).map(Like::getMediaUuid).toList()
+        );
     }
 }

@@ -1,6 +1,5 @@
 package me.theowm.usermicroservice.controllers;
 
-import me.theowm.usermicroservice.DTOs.UserLikesResponseDTO;
 import me.theowm.usermicroservice.entities.Like;
 import me.theowm.usermicroservice.services.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/likes")
+@RequestMapping("/user/likes")
 public class LikeController {
 
     private final LikeService likeService;
@@ -44,8 +44,14 @@ public class LikeController {
     }
 
     @GetMapping("/userlikes/{userId}")
-    public ResponseEntity<UserLikesResponseDTO> getLikesForUser(@PathVariable UUID userId) {
+    public ResponseEntity<List<UUID>> getLikesForUser(@PathVariable UUID userId) {
         return ResponseEntity.ok(likeService.getLikesForUser(userId));
+    }
+
+    @GetMapping("/userlikes/map/{userId}")
+    public ResponseEntity<Map<String, List<UUID>>> getUserLikesMap(@PathVariable UUID userId) {
+        Map<String, List<UUID>> userLikes = likeService.getUserLikes(userId);
+        return ResponseEntity.ok(userLikes);
     }
 
 }
