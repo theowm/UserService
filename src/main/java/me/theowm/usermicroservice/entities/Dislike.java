@@ -20,7 +20,8 @@ public class Dislike {
     @JoinColumn(referencedColumnName = "uuid")
     private User user;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "char(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID mediaUuid;
 
     @Enumerated(EnumType.STRING)
