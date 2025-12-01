@@ -1,6 +1,6 @@
 INSERT INTO users (uuid, name, username) VALUES
-('11111111-1111-1111-1111-111111111111', 'John Doe', 'john'),
-('22222222-2222-2222-2222-222222222222', 'Jane Smith', 'jane');
+('57b038ed-fb36-4b39-8748-5fafe89bf2b0', 'John Doe', 'john'),
+('d4733399-2251-4ba2-8bab-3035fe884edc', 'Jane Smith', 'jane');
 
 INSERT INTO likes (uuid, user_uuid, media_uuid, media_type) VALUES
 ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', '99999999-9999-9999-9999-999999999999', 'MUSIC'),
